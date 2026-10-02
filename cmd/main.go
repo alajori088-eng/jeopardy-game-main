@@ -11,12 +11,21 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	// تخطي خطأ عدم وجود ملف .env عند التشغيل على السحاب
+	_ = godotenv.Load()
+
 	cfg := config.MustLoad()
 	log := setupLogger()
 	log.Info("starting jeopardy-game")
+
+	// إذا كانت المنصة (مثل Render) تعطي منفذ PORT، نقوم بتحديثه في الإعدادات
+	if port := os.Getenv("PORT"); port != "" {
+		cfg.Address = ":" + port
+	}
 
 	// Load game config
 	gameConfig, err := config.NewGameConfigManager("configs/questions.yaml")
