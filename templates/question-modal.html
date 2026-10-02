@@ -1,0 +1,109 @@
+{{define "question-modal"}}
+<div class="content has-text-right" dir="rtl">
+    <!-- Question Header -->
+    <div class="level mb-4">
+        <div class="level-left">
+            <div class="level-item">
+                <span class="tag is-warning is-medium has-text-weight-bold" style="background-color: #ff5722; color: white;">{{.Question.Points}} نقطة</span>
+            </div>
+        </div>
+        {{if .CurrentPlayer}}
+        <div class="level-right">
+            <div class="level-item">
+                <div class="tags has-addons">
+                    <span class="tag is-dark is-medium" style="background-color: #3e2723; color: #ffccbc;">دور اللاعب</span>
+                    <span class="tag is-primary is-medium has-text-weight-bold" style="background-color: #ff9800; color: #000;">{{.CurrentPlayer.Name}}</span>
+                </div>
+            </div>
+        </div>
+        {{end}}
+    </div>
+
+    <!-- Question Content -->
+    <div class="box" style="background-color: #2b0f00; border: 1px solid #ff5722; border-radius: 10px;">
+        <p class="is-size-5 has-text-white has-text-weight-bold">{{.Question.Question}}</p>
+    </div>
+
+    <!-- Media Content -->
+    {{if .Question.MediaURL}}
+    <div class="media-container">
+        {{if eq .Question.MediaType "image"}}
+            <img src="{{.Question.MediaURL}}" alt="صورة السؤال">
+        {{else if eq .Question.MediaType "video"}}
+            <div class="youtube-container" data-video-url="{{.Question.MediaURL}}" data-player-id="youtube-player-{{.Question.ID}}">
+                <div id="youtube-player-{{.Question.ID}}"></div>
+            </div>
+        {{else if eq .Question.MediaType "audio"}}
+            <audio controls class="w-100">
+                <source src="{{.Question.MediaURL}}" type="audio/mp3">
+                متصفحك لا يدعم تشغيل الملفات الصوتية.
+            </audio>
+        {{end}}
+    </div>
+    {{end}}
+
+    <!-- Answer Section -->
+    {{if .CurrentPlayer}}
+    <div class="field is-grouped is-grouped-centered mt-5">
+        <p class="control">
+            <button class="button is-success is-medium has-text-weight-bold"
+                    hx-post="/question/{{.Question.ID}}/answer"
+                    hx-target="#main-content"
+                    hx-vals='{"correct": "true"}'
+                    onclick="closeModal()"
+                    style="background-color: #2e7d32;">
+                <span class="icon">
+                    <i class="fas fa-check"></i>
+                </span>
+                <span>إجابة صحيحة (+ النقاط)</span>
+            </button>
+        </p>
+        <p class="control">
+            <button class="button is-danger is-medium has-text-weight-bold"
+                    hx-post="/question/{{.Question.ID}}/answer"
+                    hx-target="#main-content"
+                    hx-vals='{"correct": "false"}'
+                    onclick="closeModal()"
+                    style="background-color: #c62828;">
+                <span class="icon">
+                    <i class="fas fa-times"></i>
+                </span>
+                <span>إجابة خاطئة (- النقاط)</span>
+            </button>
+        </p>
+    </div>
+    {{else}}
+    <div class="notification is-warning" style="background-color: #ffb74d; color: #1a0800;">
+        <p class="has-text-centered has-text-weight-bold">الرجاء إضافة لاعبين في الصفحة الرئيسية لبدء الاحتساب!</p>
+    </div>
+    {{end}}
+
+    <!-- Answer Display -->
+    <div class="mt-4">
+        <button class="button is-info is-fullwidth has-text-weight-bold" onclick="toggleAnswer()" style="background-color: #e65100;">
+            <span class="icon">
+                <i class="fas fa-eye"></i>
+            </span>
+            <span>إظهار / إخفاء الإجابة الصحيحة</span>
+        </button>
+        <div id="answer-text" class="box mt-2" style="display: none; background-color: #3e2723; border: 1px solid #ff9800;">
+            <p class="is-size-5 has-text-warning has-text-weight-bold">الإجابة: {{.Question.Answer}}</p>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleAnswer() {
+    const answerText = document.getElementById('answer-text');
+    answerText.style.display = answerText.style.display === 'none' ? 'block' : 'none';
+}
+
+// Initialize YouTube player if present
+const playerContainer = document.querySelector('[data-video-url]');
+if (playerContainer) {
+    const videoUrl = playerContainer.dataset.videoUrl;
+    const playerId = playerContainer.dataset.playerId;
+    setTimeout(() => initYouTubePlayer(playerId, videoUrl), 100);
+}
+</script>
+{{end}}

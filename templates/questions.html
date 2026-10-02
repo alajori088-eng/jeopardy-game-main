@@ -1,0 +1,111 @@
+{{define "questions"}}
+<div class="board">
+    <div class="container">
+        <!-- شعار وعنوان اللعبة الفخم -->
+        <div class="has-text-centered mb-5">
+            <h1 class="title is-2 has-text-weight-bold" style="color: #ffb74d; text-shadow: 0 2px 10px rgba(255, 87, 34, 0.5);">سين جيم 🎮</h1>
+            <p class="subtitle is-6 has-text-grey-light">اختر الفئة وقيمة النقاط وابدأ التحدي!</p>
+        </div>
+
+        <!-- Categories and Questions Grid -->
+        {{range .CategoryRows}}
+        <div class="columns is-variable is-2 mb-3 is-multiline is-centered">
+            <!-- Category Box -->
+            <div class="column is-12-mobile is-3-tablet">
+                <div class="box has-text-centered mb-0" style="background: linear-gradient(135deg, #e64a19, #bf360c); color: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                    <h3 class="title is-6 has-text-white mb-0" style="font-weight: 700;">{{.Category.Name}}</h3>
+                </div>
+            </div>
+
+            <!-- Questions for this category -->
+            <div class="column is-12-mobile is-9-tablet">
+                <div class="columns is-mobile is-multiline mb-0">
+                    {{range .Questions}}
+                    <div class="column is-one-fifth-tablet is-one-fifth-mobile">
+                        <div class="box question-box {{if .IsAnswered}}answered{{end}}"
+                             hx-get="/question/{{.ID}}"
+                             hx-target="#question-modal-content"
+                             hx-trigger="click"
+                             onclick="document.getElementById('question-modal').classList.add('is-active')"
+                             {{if not .IsAnswered}}style="cursor: pointer;"{{end}}>
+                            {{if .IsAnswered}}
+                                {{if .WasCorrect}}
+                                    <span class="icon has-text-success is-large">
+                                        <i class="fas fa-check fa-lg"></i>
+                                    </span>
+                                {{else}}
+                                    <span class="icon has-text-danger is-large">
+                                        <i class="fas fa-times fa-lg"></i>
+                                    </span>
+                                {{end}}
+                            {{else}}
+                                <div class="has-text-centered">
+                                    <span class="is-size-4 has-text-weight-bold" style="color: #ffccbc;">{{.Points}}</span>
+                                </div>
+                            {{end}}
+                        </div>
+                    </div>
+                    {{end}}
+                </div>
+            </div>
+        </div>
+        {{end}}
+    </div>
+</div>
+
+<!-- Question Modal -->
+<div id="question-modal" class="modal">
+    <div class="modal-background" onclick="closeModal()"></div>
+    <div class="modal-card" style="max-width: 650px; margin: 1rem;">
+        <header class="modal-card-head" style="background-color: #2b0f00; border-bottom: 2px solid #ff5722;">
+            <p class="modal-card-title has-text-white" style="font-family: 'Cairo', sans-serif;">نافذة السؤال التحدي</p>
+            <button class="delete" aria-label="close" onclick="closeModal()"></button>
+        </header>
+        <section id="question-modal-content" class="modal-card-body" style="background-color: #1a0800; color: white;">
+            <!-- Question content will be loaded here -->
+        </section>
+    </div>
+</div>
+
+<style>
+.board {
+    padding: 1rem 0;
+}
+.question-box {
+    min-height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #d84315, #b71c1c);
+    color: white;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.question-box:hover:not(.answered) {
+    transform: translateY(-3px) scale(1.03);
+    background: linear-gradient(135deg, #f4511e, #d32f2f);
+    box-shadow: 0 6px 12px rgba(255, 87, 34, 0.4);
+}
+.question-box.answered {
+    background: #3e2723;
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+</style>
+
+<script>
+function closeModal() {
+    document.getElementById('question-modal').classList.remove('is-active');
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeModal();
+    }
+});
+</script>
+{{end}}

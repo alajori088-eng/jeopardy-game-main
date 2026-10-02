@@ -1,0 +1,112 @@
+categories:
+  - name: "مسلسلات رمضانية"
+    questions:
+      - question: "في أي عام تم إنتاج مسلسل درب الزلق؟"
+        answer: "عام 1977"
+        points: 100
+        media_type: "image"
+        media_url: "https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=500"
+      - question: "من هو بطل مسلسل باب الحارة في شخصية أبو عصام؟"
+        answer: "الممثل عباس النوري"
+        points: 200
+        media_type: "none"
+        media_url: ""
+      - question: "ما هو اسم مسلسل الكرتون الكويتي الشهير الذي يناقش القضايا الاجتماعية بأسلوب كوميدي؟"
+        answer: "فریج"
+        points: 300
+        media_type: "video"
+        media_url: "https://www.youtube.com/watch?v=YbB4-7OS6Co"
+      - question: "مسلسل بدوي شهير من بطولة عابد فهد وسلوم حداد، يتحدث عن الصراع والقبيلة، ما هو؟"
+        answer: "التውه (أو مسلسل نمر بن عدوان)"
+        points: 400
+        media_type: "none"
+        media_url: ""
+      - question: "ما اسم البرنامج الكوميدي الشهير الذي قدمه داود حسين وحسن البلام وكان يحاكي البرامج والشخصيات؟"
+        answer: "قرقيعان"
+        points: 500
+        media_type: "none"
+        media_url: ""
+
+  - name: "تاريخ وتراث"
+    questions:
+      - question: "ما هي المدينة التاريخية الأردنية التي نحتت في الصخر وتعتبر إحدى عجائب الدنيا السبع؟"
+        answer: "البتراء"
+        points: 100
+        media_type: "image"
+        media_url: "https://images.unsplash.com/photo-1588613437532-a5b512c1eb60?w=500"
+      - question: "في أي عام كانت معركة الكرامة الخالدة؟"
+        answer: "عام 1968"
+        points: 200
+        media_type: "none"
+        media_url: ""
+      - question: "ما هي الدولة التي بنى أهراماتها الفراعنة؟"
+        answer: "مصر"
+        points: 300
+        media_type: "none"
+        media_url: ""
+      - question: "ما هو اسم المعاهدة التي أنهت الحرب العالمية الأولى؟"
+        answer: "معاهدة فرساي"
+        points: 400
+        media_type: "none"
+        media_url: ""
+      - question: "من هو الخليفة المسلم الذي فتح القسطنطينية؟"
+        answer: "السلطان محمد الفاتح"
+        points: 500
+        media_type: "none"
+        media_url: ""
+
+  - name: "معلومات عامة"
+    questions:
+      - question: "ما هو الكوكب الملقب بالكوكب الأحمر؟"
+        answer: "المريخ"
+        points: 100
+        media_type: "none"
+        media_url: ""
+      - question: "ما هي عاصمة دولة الإمارات العربية المتحدة؟"
+        answer: "أبوظبي"
+        points: 200
+        media_type: "none"
+        media_url: ""
+      - question: "كم عدد سور القرآن الكريم؟"
+        answer: "114 سورة"
+        points: 300
+        media_type: "none"
+        media_url: ""
+      - question: "ما هو العنصر الكيميائي الذي يرمز له بـ (Au)؟"
+        answer: "الذهب"
+        points: 400
+        media_type: "none"
+        media_url: ""
+      - question: "ما هو الحيوان الذي يُسمى أحياناً بـ 'سفينة الصحراء'؟"
+        answer: "الجمل"
+        points: 500
+        media_type: "none"
+        media_url: ""
+
+  - name: "رياضة وسيارات"
+    questions:
+      - question: "كم عدد لاعبي فريق كرة القدم الأساسي في الملعب؟"
+        answer: "11 لاعباً"
+        points: 100
+        media_type: "none"
+        media_url: ""
+      - question: "ما هو المنتخب الذي فاز بكأس العالم لكرة القدم 2022؟"
+        answer: "منتخب الأرجنتين"
+        points: 200
+        media_type: "none"
+        media_url: ""
+      - question: "ما هي العلامة التجارية للسيارات التي تظهر شعار حصان جامح؟"
+        answer: "فيراري"
+        points: 300
+        media_type: "image"
+        media_url: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=500"
+      - question: "في أي لعبة رياضية يُستخدم مصطلح 'سلة ثلاثية النقاط'؟"
+        answer: "كرة السلة"
+        points: 400
+        media_type: "none"
+        media_url: ""
+      - question: "ما هي حلبة السباق الشهيرة في الإمارات التي تستضيف سباقات الفورمولا 1؟"
+        answer: "حلبة مرسى ياس (أبوظبي)"
+        points: 500
+        media_type: "none"
+        media_url: ""

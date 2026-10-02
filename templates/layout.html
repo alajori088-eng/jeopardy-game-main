@@ -1,0 +1,145 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سين جيم | SEEN JEEM</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a0800 0%, #2b0f00 50%, #0d0400 100%);
+            color: #ffffff;
+            font-family: 'Cairo', sans-serif;
+        }
+        .container {
+            max-width: 1200px !important;
+            padding: 1rem;
+        }
+        .modal {
+            display: none;
+        }
+        .modal.is-active {
+            display: flex;
+        }
+        .media-container {
+            margin: 1rem 0;
+            text-align: center;
+        }
+        .media-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(255, 100, 0, 0.3);
+        }
+        .media-container video,
+        .media-container audio {
+            width: 100%;
+        }
+        .youtube-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        .youtube-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .section {
+            padding: 1.5rem;
+        }
+        /* تحسين مظهر الأزرار والعناصر العامة لتتناسب مع الثيم البرتقالي الناري الفخم */
+        .button.is-primary {
+            background-color: #ff5722;
+            border-color: transparent;
+            font-weight: bold;
+        }
+        .button.is-primary:hover {
+            background-color: #f4511e;
+        }
+    </style>
+    <script>
+        // Load YouTube API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var youtubeAPIReady = false;
+        window.onYouTubeIframeAPIReady = function() {
+            youtubeAPIReady = true;
+            initializePendingPlayers();
+        };
+
+        var pendingPlayers = [];
+        function initializePendingPlayers() {
+            while (pendingPlayers.length > 0) {
+                var player = pendingPlayers.pop();
+                createYouTubePlayer(player.containerId, player.videoUrl);
+            }
+        }
+
+        function createYouTubePlayer(containerId, videoUrl) {
+            var videoId = getYouTubeVideoId(videoUrl);
+            if (videoId) {
+                new YT.Player(containerId, {
+                    videoId: videoId,
+                    height: '100%',
+                    width: '100%',
+                    playerVars: {
+                        'autoplay': 0,
+                        'controls': 1,
+                        'rel': 0,
+                        'modestbranding': 1
+                    }
+                });
+            }
+        }
+
+        function initYouTubePlayer(containerId, videoUrl) {
+            if (youtubeAPIReady) {
+                createYouTubePlayer(containerId, videoUrl);
+            } else {
+                pendingPlayers.push({ containerId, videoUrl });
+            }
+        }
+
+        function getYouTubeVideoId(url) {
+            var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+            var match = url.match(regExp);
+            return (match && match[7].length == 11) ? match[7] : false;
+        }
+
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.classList.remove('is-active');
+            });
+        }
+
+        document.addEventListener('htmx:afterSwap', function(event) {
+            if (event.detail.target.classList.contains('modal-content')) {
+                const playerContainer = event.detail.target.querySelector('.youtube-container');
+                if (playerContainer) {
+                    const videoUrl = playerContainer.dataset.videoUrl;
+                    const playerId = playerContainer.dataset.playerId;
+                    initYouTubePlayer(playerId, videoUrl);
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+    {{template "content" .}}
+</body>
+</html>
+{{end}}
