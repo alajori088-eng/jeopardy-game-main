@@ -1,7 +1,6 @@
 package config
 
 import (
-	"log"
 	"os"
 	"time"
 
@@ -58,10 +57,10 @@ func MustLoad() *Config {
 	// تجاهل خطأ عدم وجود ملف .env على السحاب
 	_ = godotenv.Load()
 
-	// إذا لم يتم تحديد CONFIG_PATH، استخدم المسار الافتراضي محلياً أو على السحاب
+	// إذا لم يتم تحديد CONFIG_PATH، استخدم المسار الافتراضي
 	configPath := os.Getenv("CONFIG_PATH")
 	if configPath == "" {
-		configPath = "configs/local.yaml" // أو مسار ملف الإعدادات الخاص بك
+		configPath = "configs/questions.yaml"
 	}
 
 	var cfg Config
