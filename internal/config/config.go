@@ -11,12 +11,12 @@ import (
 )
 
 type Config struct {
-	StoragePath string `yaml:"storage_path" env-required:"true"`
+	StoragePath string `yaml:"storage_path" env-default:"configs/game.db"`
 	HttpServer  `yaml:"http_server"`
 }
 
 type HttpServer struct {
-	Address     string        `yaml:"address" env-default:"localhost:8080"`
+	Address     string        `yaml:"address" env-default:":8080"`
 	Timeout     time.Duration `yaml:"timeout" env-default:"4s"`
 	IdleTimeout time.Duration `yaml:"idle_timeout" env-default:"60s"`
 }
@@ -55,23 +55,34 @@ func NewGameConfigManager(configPath string) (*GameConfigManager, error) {
 }
 
 func MustLoad() *Config {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal(err)
-	}
+	// تجاهل خطأ عدم وجود ملف .env على السحاب
+	_ = godotenv.Load()
+
+	// إذا لم يتم تحديد CONFIG_PATH، استخدم المسار الافتراضي محلياً أو على السحاب
 	configPath := os.Getenv("CONFIG_PATH")
 	if configPath == "" {
-		log.Fatal("config_path not set")
-	}
-
-	if _, err := os.Stat(configPath); os.IsNotExist(err) {
-		log.Fatalf("config file does not exist: %s", configPath)
+		configPath = "configs/local.yaml" // أو مسار ملف الإعدادات الخاص بك
 	}
 
 	var cfg Config
 
-	if err := cleanenv.ReadConfig(configPath, &cfg); err != nil {
-		log.Fatalf("cannot read config: %s", err)
+	// إذا وجد ملف الإعدادات نقرأه، وإذا لم يوجد نعتمد القيم الافتراضية لتجنب الانهيار
+	if _, err := os.Stat(configPath); err == nil {
+		_ = cleanenv.ReadConfig(configPath, &cfg)
 	}
+
+	// دعم منفذ Render التلقائي
+	if port := os.Getenv("PORT"); port != "" {
+		cfg.HttpServer.Address = ":" + port
+	}
+
+	if cfg.HttpServer.Address == "" {
+		cfg.HttpServer.Address = ":8080"
+	}
+
+	if cfg.StoragePath == "" {
+		cfg.StoragePath = "configs/game.db"
+	}
+
 	return &cfg
 }
