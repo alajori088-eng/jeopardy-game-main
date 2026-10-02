@@ -1,34 +1,25 @@
-# Build stage
 FROM golang:1.21-alpine AS builder
 
+# تثبيت متطلبات C و CGO لتشغيل مكتبة sqlite3 بنجاح
+RUN apk add --no-cache gcc musl-dev
+
 WORKDIR /app
 
-# Copy go mod and sum files
 COPY go.mod go.sum ./
-
-# Download dependencies
 RUN go mod download
 
-# Copy the source code
 COPY . .
 
-# Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -o jeopardy-game ./cmd/main.go
+# تفعيل CGO_ENABLED=1 للبناء
+RUN CGO_ENABLED=1 GOOS=linux go build -o jeopardy-game ./cmd/main.go
 
-# Final stage
 FROM alpine:latest
-
 WORKDIR /app
 
-# Copy the binary from builder
 COPY --from=builder /app/jeopardy-game .
-# Copy config files
 COPY --from=builder /app/configs ./configs
-# Copy templates
 COPY --from=builder /app/templates ./templates
 
-# Expose the port the app runs on
 EXPOSE 8080
 
-# Run the binary
-CMD ["./jeopardy-game"] 
+CMD ["./jeopardy-game"]
